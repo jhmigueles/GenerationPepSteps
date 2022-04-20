@@ -43,7 +43,7 @@ step.metrics = function(){
 
     #Loop through days to calculate variables
     date = date_num = wday_num = day.min = stepsperday = SporadicStepsperday = sit2standperday = NA
-    first_epoch_with_steps = last_epoch_with_steps = longest_gap = NA
+    first_epoch_with_steps = last_epoch_with_steps = window_firslast = longest_gap = NA
     pk60min = N0s_pk60min = N0s_pk30min = pk30min = pk1min = NA
     band_0 = band_1_19 = band_20_39 = band_40_59 = band_60_79 = band_80_99 = band_100_119 = band_120_higher = NA
     MPA = VPA = MVPA = NA
@@ -61,11 +61,13 @@ step.metrics = function(){
         first_epoch_with_steps[di] = tmp_without0$time[1]
         last_epoch_with_steps[di] = tmp_without0$time[nrow(tmp_without0)]
         tmp_firstlast = tmp[which(tmp$time == first_epoch_with_steps[di]):which(tmp$time == last_epoch_with_steps[di]),]
-        longest_gap[di] = max(rle(tmp_firstlast$steps)$lengths[which(rle(tmp_firstlast$steps)$values == 0)])
+        window_firslast[di] = nrow(tmp_firstlast)
+        longest_gap[di] = max(rle(tmp_firstlast$steps)$lengths[which(rle(tmp_firstlast$steps)$values == 0)])[1]
         rm(tmp, tmp_without0, tmp_firstlast)
       } else {
         first_epoch_with_steps[di] = NA
         last_epoch_with_steps[di] = NA
+        window_firslast[di] = 0
         longest_gap[di] = 1440
         rm(tmp)
       }
@@ -102,7 +104,7 @@ step.metrics = function(){
     }
     ##OUTPUT PER DAY
     names.out = c("id","date","wday_num","dur_day_min","th_MOD","th_VIG",
-                  "first_epoch_with_steps", "last_epoch_with_steps", "longest_gap_without_steps",
+                  "first_epoch_with_steps", "last_epoch_with_steps", "window_first.last_min", "longest_gap_without_steps_min",
                   "stepsperday", "SporadicStepsperday", "sit2standperday",
                   "CAD_pk60_spm","CAD_N0s_pk60_spm","CAD_pk30_spm", "CAD_N0s_pk30_spm","CAD_pk1_spm",
                   "band_CAD_0_min","band_CAD_1-19_min","band_CAD_20-39_min","band_CAD_40-59_min",
@@ -119,6 +121,7 @@ step.metrics = function(){
     daily.out[, fi:(fi + 1)] = cbind(rep(th.MOD, times = nrow(daily.out)), rep(th.VIG, times = nrow(daily.out))); fi = fi + 2
     daily.out[, fi] = first_epoch_with_steps; fi = fi + 1
     daily.out[, fi] = last_epoch_with_steps; fi = fi + 1
+    daily.out[, fi] = window_firslast; fi = fi + 1
     daily.out[, fi] = longest_gap; fi = fi + 1
     daily.out[, fi:ncol(daily.out)] = cbind(stepsperday, SporadicStepsperday, sit2standperday,
                                             pk60min, N0s_pk60min, pk30min, N0s_pk30min, pk1min,
