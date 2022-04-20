@@ -5,8 +5,6 @@
 #'
 #' @return New data frame aggregated per 60s
 #' @export
-#'
-#' @examples
 agg60s = function(data = c(), epoch = c()) {
   require(zoo)
   rolling_window = 60 / epoch

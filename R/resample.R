@@ -8,13 +8,12 @@
 #'
 #' @return Data frame resampled
 #' @export
-#'
-#' @examples
 resample = function(data = c(), timestamp_col = c(), timestamp_format = c(),
                     id_col = c(), mon = c()){
-  require(lubridate)
+  suppressMessages(require(lubridate))
   ts = data[, timestamp_col]
   if (timestamp_format != "iso") {
+    ts = suppressMessages(lubridate::as_datetime(ts, tz = "Europe/Stockholm"))
     ts_iso = timestamp2iso8601(ts, tz = "Europe/Stockholm", time_format = timestamp_format)
   } else {
     ts_iso = ts
@@ -55,6 +54,7 @@ resample = function(data = c(), timestamp_col = c(), timestamp_format = c(),
     }
   } else if (mon == "Scriin") {
     measured = which(ts_iso_resampled %in% ts_iso)
+    data[, timestamp_col] = ts_iso
     newData[measured,] = data
   } else {
     stop("Resampling is only available for FIBION and Scriin devices at the moment.")

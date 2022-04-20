@@ -4,8 +4,6 @@
 #'
 #' @return
 #' @export
-#'
-#' @examples
 detect_midnights = function(t = c()) {
   mnightsi = grep("00:00:00", t, fixed = T)
   # IF ONLY 1 DAY...

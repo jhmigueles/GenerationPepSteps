@@ -6,8 +6,6 @@
 #'
 #' @return
 #' @export
-#'
-#' @examples
 timestamp2iso8601 = function(x,tz = "", time_format = c()){
   # timeformats to try ----
   if (is.null(time_format)) {
@@ -26,7 +24,7 @@ timestamp2iso8601 = function(x,tz = "", time_format = c()){
   # format conversion to iso 8601 ----
   if (is.null(time_format)) {
     POStime = as.POSIXlt(as.numeric(as.POSIXlt(x,tz, tryFormats = tryFormats)), origin = "1970-01-01", tz)
-  } else if(!is.null(time_format)) {
+  } else if (!is.null(time_format)) {
     POStime = as.POSIXlt(as.numeric(as.POSIXlt(x,tz, format = time_format)), origin = "1970-01-01", tz)
   }
   POStimeISO = strftime(POStime,format = "%Y-%m-%dT%H:%M:%S%z")

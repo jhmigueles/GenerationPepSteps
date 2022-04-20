@@ -5,11 +5,10 @@
 #'
 #' @return Data frame with the accelerometer data information
 #' @export
-#'
-#' @examples
 readFile = function(file = c(), mon = c()) {
   if (mon == "FIBION" | mon == "ActiGraph") acc = utils::read.csv(file)
-  if (mon == "Scriin") acc = utils::read.delim(file, sep = "|", header = F)
+  if (mon == "Scriin") acc = tryCatch(utils::read.delim(file, sep = "|", header = F),
+                                      error = function(cond){return = NA})
   if (mon == "Other") stop("To be developed")
   return(acc)
 }

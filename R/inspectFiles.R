@@ -2,8 +2,6 @@
 #'
 #' @return List with datadir, outputdir, metadatadir, files, monitor, and format
 #' @export
-#'
-#' @examples
 inspectFiles = function(){
   # ask user what device is being analized (FIBION or Scriin)
   mon = menu(choices = c("FIBION", "Scriin", "ActiGraph", "Other"),
@@ -24,7 +22,7 @@ inspectFiles = function(){
     mon = "Scriin"
     format = "txt"
     timestamp_col = 2
-    timestamp_format = "%Y-%m-%d %H:%M:%S"
+    timestamp_format = "%Y-%m-%d %H:%M:%S%z"
     epoch = 60
     steps = 3
     steps_sporadic = c()
