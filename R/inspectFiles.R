@@ -3,59 +3,54 @@
 #' @return List with datadir, outputdir, metadatadir, files, monitor, and format
 #' @export
 inspectFiles = function(){
-  # ask user what device is being analized (FIBION or Scriin)
-  mon = menu(choices = c("FIBION", "Scriin", "ActiGraph", "Other"),
-             title = "\nWhat monitor have you used to record steps?")
-  if (mon == 1) {
-    id_col = c()
-    mon = "FIBION"
-    format = "csv"
-    timestamp_col = "local"
-    timestamp_format = "iso"
-    epoch = 900
-    steps = "activity.steps.count"
-    steps_sporadic = "activity.steps2.count"
-    sit2stand = "activity.sit2stand.count"
-    resample = T
-  } else if (mon == 2) {
-    id_col = 1
-    mon = "Scriin"
-    format = "txt"
-    timestamp_col = 2
-    timestamp_format = "%Y-%m-%d %H:%M:%S%z"
-    epoch = 60
-    steps = 3
-    steps_sporadic = c()
-    sit2stand = c()
-    resample = T
-  } else if (mon == 3) {
-    id_col = c()
-    mon = "ActiGraph"
-    format = menu(choices = c("agd", "csv"),
-                  title = "\nWhat is the format of your files?")
-    if (format == 1) format = "agd" else if (format == 2) format = "csv"
-    if (format == "agd") stop("agd files cannot be read at the moment")
-    timestamp_col = "timestamp"
-    timestamp_format = c()
-    epoch = "epochlengthinseconds"
-    steps = "steps"
-    steps_sporadic = c()
-    sit2stand = c()
-    resample = F
-  } else if (mon == 4) {
-    stop("Function to analyze data from other monitors is under development")
-  }
 
-  # Select datadir
-  cat(paste("Please, select the directory containing the", mon, format, "files...\n"))
+  # monitors info
+  info_fibion = list(id_col = c(),
+                     mon = "FIBION",
+                     format = "csv",
+                     timestamp_col = "local",
+                     timestamp_format = "iso",
+                     epoch = 900,
+                     steps = "activity.steps.count",
+                     steps_sporadic = "activity.steps2.count",
+                     sit2stand = "activity.sit2stand.count",
+                     resample = T)
+
+  info_scriin = list(id_col = 1,
+                     mon = "Scriin",
+                     format = "txt",
+                     timestamp_col = 2,
+                     timestamp_format = "%Y-%m-%d %H:%M:%S%z",
+                     epoch = 60,
+                     steps = 3,
+                     steps_sporadic = c(),
+                     sit2stand = c(),
+                     resample = T)
+
+  # Select datadir FIBION
+  cat(paste("Please, select the directory containing the FIBION files...\n"))
   cat(paste0(rep('_', options()$width), collapse = ''))
-  datadir = utils::choose.dir(default = getwd(),
-                              caption = paste("Select the directory containing the", mon, format, "files"))
-  files = dir(datadir, pattern = paste0(".", format))
-  files_full = dir(datadir, pattern = paste0(".", format), full.names = TRUE)
-  nFiles = length(files)
-  cat(paste("\nThere are", nFiles, mon, "files in this folder...\n"))
-  print(files)
+  datadir_fibion = utils::choose.dir(default = getwd(),
+                              caption = paste("Where are your FIBION files?"))
+  files_fibion = dir(datadir_fibion, pattern = ".csv")
+  files_fibion_full = dir(datadir_fibion, pattern = ".csv", full.names = TRUE)
+  nFiles_fibion = length(files_fibion)
+  cat(paste("\nThere are", nFiles_fibion, "FIBION files in this folder...\n"))
+  print(files_fibion)
+  iscorrect = menu(choices = c("Yes", "No"),
+                   title = "\nDo you want to process these files?")
+  if (iscorrect == 2) stop("Data processing stopped by the user")
+
+  # Select datadir Scriin
+  cat(paste("Please, select the directory containing the Scriin files...\n"))
+  cat(paste0(rep('_', options()$width), collapse = ''))
+  datadir_scriin = utils::choose.dir(default = getwd(),
+                              caption = paste("Where are your Scriin files?"))
+  files_scriin = dir(datadir_scriin, pattern = ".txt")
+  files_scriin_full = dir(datadir_scriin, pattern = ".txt", full.names = TRUE)
+  nFiles_scriin = length(files_scriin)
+  cat(paste("\nThere are", nFiles_scriin, "Scriin files in this folder...\n"))
+  print(files_scriin)
   iscorrect = menu(choices = c("Yes", "No"),
                    title = "\nDo you want to process these files?")
   if (iscorrect == 2) stop("Data processing stopped by the user")
@@ -66,18 +61,12 @@ inspectFiles = function(){
   outputdir = utils::choose.dir(default = getwd(),
                               caption = "Select the output directory")
 
-  if (!dir.exists(file.path(outputdir, mon))) dir.create(file.path(outputdir, mon))
-  outputdir = file.path(outputdir, mon)
-
   # save directories
   metadatadir = file.path(outputdir, "metadata/")
   if (!dir.exists(metadatadir)) dir.create(metadatadir)
-  save(datadir, outputdir, metadatadir,files, mon, format,
+  save(datadir_fibion, datadir_scriin, files_fibion, files_scriin,
+       outputdir, metadatadir,
        file = file.path(metadatadir, "metadata.RData"))
 
-  invisible(list(datadir = datadir, outputdir = outputdir, metadatadir = metadatadir,
-                 files = files_full, mon = mon, format = format, id_col = id_col,
-                 timestamp_col = timestamp_col, timestamp_format = timestamp_format,
-                 epoch = epoch, steps = steps, steps_sporadic = steps_sporadic,
-                 sit2stand = sit2stand, resample = resample))
+  invisible(info_fibion = info_fibion, info_scriin = info_scriin)
 }
