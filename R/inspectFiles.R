@@ -4,29 +4,6 @@
 #' @export
 inspectFiles = function(){
 
-  # monitors info
-  info_fibion = list(id_col = c(),
-                     mon = "FIBION",
-                     format = "csv",
-                     timestamp_col = "local",
-                     timestamp_format = "iso",
-                     epoch = 900,
-                     steps = "activity.steps.count",
-                     steps_sporadic = "activity.steps2.count",
-                     sit2stand = "activity.sit2stand.count",
-                     resample = T)
-
-  info_scriin = list(id_col = 1,
-                     mon = "Scriin",
-                     format = "txt",
-                     timestamp_col = 2,
-                     timestamp_format = "%Y-%m-%d %H:%M:%S%z",
-                     epoch = 60,
-                     steps = 3,
-                     steps_sporadic = c(),
-                     sit2stand = c(),
-                     resample = T)
-
   # Select datadir FIBION
   cat(paste("Please, select the directory containing the FIBION files...\n"))
   cat(paste0(rep('_', options()$width), collapse = ''))
@@ -68,5 +45,8 @@ inspectFiles = function(){
        outputdir, metadatadir,
        file = file.path(metadatadir, "metadata.RData"))
 
-  invisible(info_fibion = info_fibion, info_scriin = info_scriin)
+  invisible(list(datadir_fibion = datadir_fibion, datadir_scriin = datadir_scriin,
+                 outputdir = outputdir, metadatadir = metadatadir,
+                 files_fibion = files_fibion, files_fibion_full = files_fibion_full,
+                 files_scriin = files_scriin, files_scriin_full = files_scriin_full))
 }

@@ -4,7 +4,10 @@
 \alias{step.metrics}
 \title{step.metrics}
 \usage{
-step.metrics()
+step.metrics(interactive = T)
+}
+\arguments{
+\item{interactive}{should the progran run interactively?}
 }
 \value{
 data frames with aggregated data
