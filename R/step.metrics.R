@@ -28,7 +28,9 @@ step.metrics = function(interactive = T){
   merge_daily(datadir_scriin, datadir_fibion, outputdir)
 
   #Calculate means per week plain and weighted
-  # get_weekly(outputdir)
+  get_weekly(outputdir)
+
+  cat("\n\nFINISHED!")
 
 }
 
