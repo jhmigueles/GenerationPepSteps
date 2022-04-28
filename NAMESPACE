@@ -2,6 +2,7 @@
 
 export(detect_midnights)
 export(get_daily)
+export(get_timeseries)
 export(get_weekly)
 export(inspectFiles)
 export(merge_daily)

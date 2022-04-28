@@ -4,7 +4,7 @@
 \alias{merge_daily}
 \title{merge_daily}
 \usage{
-merge_daily(datadir_scriin, datadir_fibion, outputdir)
+merge_daily(datadir_scriin, datadir_fibion, outputdir, save_timeseries = TRUE)
 }
 \arguments{
 \item{datadir_scriin}{Directory where the scriin files are stored}

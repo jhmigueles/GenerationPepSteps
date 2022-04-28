@@ -6,7 +6,7 @@
 #'
 #' @return
 #' @export
-merge_daily = function(datadir_scriin, datadir_fibion, outputdir) {
+merge_daily = function(datadir_scriin, datadir_fibion, outputdir, save_timeseries = TRUE) {
 
   # list of files
   files_scriin = dir(datadir_scriin, pattern = ".txt")
@@ -175,6 +175,10 @@ merge_daily = function(datadir_scriin, datadir_fibion, outputdir) {
       MPA_fibion[di] = length(which(fibion_day[, steps_fb] < th.VIG & fibion_day[, steps_fb] >= th.MOD))
       VPA_fibion[di] = length(which(fibion_day[, steps_fb] >= th.VIG))
       MVPA_fibion[di] = length(which(fibion_day[, steps_fb] >= th.MOD))
+
+      # Time series
+      if (isTRUE(save_timeseries)) get_timeseries(id = i, day = di, scriin_day, fibion_day, outputdir,
+                                                  from = 9, to = 18)
     }
     ##OUTPUT PER DAY
     names.out = c("id","mon_scriin", "mon_fibion",
